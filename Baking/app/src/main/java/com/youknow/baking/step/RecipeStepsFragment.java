@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.youknow.baking.R;
 import com.youknow.baking.data.Ingredient;
 import com.youknow.baking.data.Recipe;
+import com.youknow.baking.data.Step;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RecipeStepsFragment extends Fragment implements RecipeStepsContract.View {
+public class RecipeStepsFragment extends Fragment {
 
     private static Context mContext;
 
@@ -32,11 +33,9 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsContract
     RecyclerView.LayoutManager mLayoutManager;
 
     private OnFragmentInteractionListener mListener;
-    private RecipeStepsContract.Presenter mPresenter;
     private Recipe mRecipe;
 
     public RecipeStepsFragment() {
-        mPresenter = new RecipeStepsPresenter(this);
         mListener = (OnFragmentInteractionListener) mContext;
     }
 
@@ -59,15 +58,12 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsContract
     @Override
     public void onStart() {
         super.onStart();
-
         mLayoutManager = new LinearLayoutManager(getContext());
         rvSteps.setLayoutManager(mLayoutManager);
 
         if (getArguments() != null) {
             mRecipe = getArguments().getParcelable(getString(R.string.key_recipe));
-            Log.d("TEST", "onStart: " + mRecipe.getName());
-
-            mAdapter = new RecipeStepsAdapter(mRecipe.getSteps(), getContext());
+            mAdapter = new RecipeStepsAdapter(mRecipe.getSteps(), getContext(), mListener);
             rvSteps.setAdapter(mAdapter);
 
             cvIngredients.setOnClickListener(new View.OnClickListener() {
@@ -79,30 +75,8 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsContract
         }
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
-//        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
         void onLoadedIngredients(List<Ingredient> ingredients);
+        void onLoadedStep(Step step);
     }
 }

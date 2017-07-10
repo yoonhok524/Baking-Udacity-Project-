@@ -5,6 +5,7 @@ import com.youknow.baking.data.Step;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,11 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
     private List<Step> mSteps = new ArrayList<>();
     private Context mContext;
+    private RecipeStepsFragment.OnFragmentInteractionListener mListener;
 
-    public RecipeStepsAdapter(List<Step> steps, Context context) {
+    public RecipeStepsAdapter(List<Step> steps, Context context, RecipeStepsFragment.OnFragmentInteractionListener listener) {
         mContext = context;
+        mListener = listener;
         mSteps.clear();
         mSteps.addAll(steps);
         notifyDataSetChanged();
@@ -37,8 +40,8 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Step step = mSteps.get(position);
-        holder.tvStep.setText(mContext.getString(R.string.recipe_step_description, (position+1)));
+        holder.mStep = mSteps.get(position);
+        holder.mTvStep.setText(mContext.getString(R.string.recipe_step_description, (position+1)));
     }
 
     @Override
@@ -48,15 +51,16 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvStep;
+        Step mStep;
+        TextView mTvStep;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvStep = (TextView) itemView.findViewById(R.id.tv_step);
+            mTvStep = (TextView) itemView.findViewById(R.id.tv_step);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: Implement!
+                    mListener.onLoadedStep(mStep);
                 }
             });
         }

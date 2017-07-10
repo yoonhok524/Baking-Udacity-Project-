@@ -8,10 +8,13 @@
     <string name="fake_servings" translatable="false">Servings: 8</string>
     <string name="face_recipe_step_Description" translatable="false">Recipe Step Description</string>
     <string name="fake_ingredient_name" translatable="false">Graham Cracker crumbs</string>
+    <string name="fake_short_desc" translatable="false">Starting prep</string>
+    <string name="fake_step_desc" translatable="false">1. Preheat the oven to 350\\u00b0F. Butter a 9\\\" deep dish pie pan.</string>
 
     <!-- keys -->
     <string name="key_recipe" translatable="false">key_recipe</string>
     <string name="key_ingredients" translatable="false">key_ingredients</string>
+    <string name="key_step" translatable="false">key_step</string>
 
     <string name="ingredient_num">Number of Ingredient: %1$d</string>
     <string name="step_num">Number of Step: %1$d</string>
@@ -22,5 +25,7 @@
     <string name="recipe_step_description">Recipe Step %1$d</string>
     <string name="fake_ingredient_quantity">2</string>
     <string name="fake_ingredient_measure">CUP</string>
+    <string name="prev">Previous</string>
+    <string name="next">Next</string>
 
 </resources>

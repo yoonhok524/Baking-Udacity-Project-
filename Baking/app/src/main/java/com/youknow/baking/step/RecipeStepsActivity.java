@@ -6,11 +6,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.youknow.baking.R;
 import com.youknow.baking.data.Ingredient;
 import com.youknow.baking.data.Recipe;
+import com.youknow.baking.data.Step;
 import com.youknow.baking.step.details.ingredient.IngredientDetailsFragment;
+import com.youknow.baking.step.details.step.StepDetailsFragment;
 
 import java.util.List;
 
@@ -36,13 +39,17 @@ public class RecipeStepsActivity extends AppCompatActivity implements RecipeStep
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onLoadedIngredients(List<Ingredient> ingredients) {
+        Fragment fragment = IngredientDetailsFragment.newInstance(this, ingredients);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     @Override
-    public void onLoadedIngredients(List<Ingredient> ingredients) {
-        Fragment fragment = IngredientDetailsFragment.newInstance(this, ingredients);
+    public void onLoadedStep(Step step) {
+        Fragment fragment = StepDetailsFragment.newInstance(this, step);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
         ft.addToBackStack(null);

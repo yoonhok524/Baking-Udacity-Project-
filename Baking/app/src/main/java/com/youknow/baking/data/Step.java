@@ -11,9 +11,10 @@ import lombok.Data;
 @Data
 public class Step implements Parcelable {
     String id;
-    String shortDesc;
-    String videoUrl;
-    String thumbnailUrl;
+    String shortDescription;
+    String description;
+    String videoURL;
+    String thumbnailURL;
 
     @Override
     public int describeContents() {
@@ -23,16 +24,18 @@ public class Step implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
-        dest.writeString(this.shortDesc);
-        dest.writeString(this.videoUrl);
-        dest.writeString(this.thumbnailUrl);
+        dest.writeString(this.shortDescription);
+        dest.writeString(this.description);
+        dest.writeString(this.videoURL);
+        dest.writeString(this.thumbnailURL);
     }
 
     protected Step(Parcel in) {
         this.id = in.readString();
-        this.shortDesc = in.readString();
-        this.videoUrl = in.readString();
-        this.thumbnailUrl = in.readString();
+        this.shortDescription = in.readString();
+        this.description = in.readString();
+        this.videoURL = in.readString();
+        this.thumbnailURL = in.readString();
     }
 
     public static final Parcelable.Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
