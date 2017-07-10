@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
 
+    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
     @BindView(R.id.rv_recipes) RecyclerView mRvRecipes;
     RecipesAdapter mRecipesAdapter;
     RecyclerView.LayoutManager mLayoutManager;
@@ -41,11 +44,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     protected void onStart() {
         super.onStart();
+        mProgressBar.setVisibility(View.VISIBLE);
         mPresenter.fetchRecipes();
     }
 
     @Override
     public void onLoadedRecipes(List<Recipe> recipes) {
         mRecipesAdapter.update(recipes);
+        mProgressBar.setVisibility(View.GONE);
     }
 }

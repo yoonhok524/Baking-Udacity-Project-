@@ -1,4 +1,4 @@
-package com.youknow.baking.details;
+package com.youknow.baking.step.details;
 
 /**
  * Created by Aaron on 10/07/2017.

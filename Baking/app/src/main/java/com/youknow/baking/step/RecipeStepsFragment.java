@@ -1,4 +1,4 @@
-package com.youknow.baking.details;
+package com.youknow.baking.step;
 
 import android.content.Context;
 import android.net.Uri;
@@ -13,12 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.youknow.baking.R;
+import com.youknow.baking.data.Ingredient;
 import com.youknow.baking.data.Recipe;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class RecipeDetailsFragment extends Fragment implements RecipeDetailsContract.View {
+public class RecipeStepsFragment extends Fragment implements RecipeStepsContract.View {
 
     private static Context mContext;
 
@@ -28,16 +32,17 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsCont
     RecyclerView.LayoutManager mLayoutManager;
 
     private OnFragmentInteractionListener mListener;
-    private RecipeDetailsContract.Presenter mPresenter;
+    private RecipeStepsContract.Presenter mPresenter;
     private Recipe mRecipe;
 
-    public RecipeDetailsFragment() {
-        mPresenter = new RecipeDetailsPresenter(this);
+    public RecipeStepsFragment() {
+        mPresenter = new RecipeStepsPresenter(this);
+        mListener = (OnFragmentInteractionListener) mContext;
     }
 
-    public static RecipeDetailsFragment newInstance(Context context, Recipe recipe) {
+    public static RecipeStepsFragment newInstance(Context context, Recipe recipe) {
         mContext = context;
-        RecipeDetailsFragment fragment = new RecipeDetailsFragment();
+        RecipeStepsFragment fragment = new RecipeStepsFragment();
         Bundle args = new Bundle();
         args.putParcelable(mContext.getString(R.string.key_recipe), recipe);
         fragment.setArguments(args);
@@ -46,7 +51,7 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsCont
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_recipe_details, container, false);
+        View root = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
         ButterKnife.bind(this, root);
         return root;
     }
@@ -60,9 +65,17 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsCont
 
         if (getArguments() != null) {
             mRecipe = getArguments().getParcelable(getString(R.string.key_recipe));
+            Log.d("TEST", "onStart: " + mRecipe.getName());
 
             mAdapter = new RecipeStepsAdapter(mRecipe.getSteps(), getContext());
             rvSteps.setAdapter(mAdapter);
+
+            cvIngredients.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onLoadedIngredients(mRecipe.getIngredients());
+                }
+            });
         }
     }
 
@@ -90,5 +103,6 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsCont
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+        void onLoadedIngredients(List<Ingredient> ingredients);
     }
 }

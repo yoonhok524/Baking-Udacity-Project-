@@ -2,13 +2,12 @@ package com.youknow.baking;
 
 import com.squareup.picasso.Picasso;
 import com.youknow.baking.data.Recipe;
-import com.youknow.baking.details.RecipeDetailsActivity;
+import com.youknow.baking.step.RecipeStepsActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +83,7 @@ public class RecipesAdapter extends Adapter<RecipesAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, RecipeDetailsActivity.class);
+                    Intent intent = new Intent(mContext, RecipeStepsActivity.class);
                     intent.putExtra(mContext.getString(R.string.key_recipe), mRecipe);
                     mContext.startActivity(intent);
                 }

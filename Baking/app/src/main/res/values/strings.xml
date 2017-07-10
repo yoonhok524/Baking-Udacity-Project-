@@ -7,9 +7,11 @@
     <string name="fake_step_num" translatable="false">Number of Step: 7</string>
     <string name="fake_servings" translatable="false">Servings: 8</string>
     <string name="face_recipe_step_Description" translatable="false">Recipe Step Description</string>
+    <string name="fake_ingredient_name" translatable="false">Graham Cracker crumbs</string>
 
     <!-- keys -->
     <string name="key_recipe" translatable="false">key_recipe</string>
+    <string name="key_ingredients" translatable="false">key_ingredients</string>
 
     <string name="ingredient_num">Number of Ingredient: %1$d</string>
     <string name="step_num">Number of Step: %1$d</string>
@@ -18,5 +20,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="recipe_ingredients">Recipe Ingredients</string>
     <string name="recipe_step_description">Recipe Step %1$d</string>
+    <string name="fake_ingredient_quantity">2</string>
+    <string name="fake_ingredient_measure">CUP</string>
 
 </resources>
