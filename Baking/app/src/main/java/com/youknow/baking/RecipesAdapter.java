@@ -44,7 +44,7 @@ public class RecipesAdapter extends Adapter<RecipesAdapter.ViewHolder> {
         holder.tvRecipeName.setText(recipe.getName());
         holder.tvRecipeIngredientNum.setText(mContext.getString(R.string.ingredient_num, recipe.getIngredients().size()));
         holder.tvRecipeStepNum.setText(mContext.getString(R.string.step_num, recipe.getSteps().size()));
-        holder.tvServings.setText(mContext.getString(R.string.step_num, recipe.getServings()));
+        holder.tvServings.setText(mContext.getString(R.string.serving_num, recipe.getServings()));
 
         String imageUrl = recipe.getImageUrl();
         if (imageUrl != null && !imageUrl.isEmpty()) {

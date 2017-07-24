@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class Step implements Parcelable {
-    String id;
+    int id;
     String shortDescription;
     String description;
     String videoURL;
@@ -23,7 +23,7 @@ public class Step implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
+        dest.writeInt(this.id);
         dest.writeString(this.shortDescription);
         dest.writeString(this.description);
         dest.writeString(this.videoURL);
@@ -31,14 +31,14 @@ public class Step implements Parcelable {
     }
 
     protected Step(Parcel in) {
-        this.id = in.readString();
+        this.id = in.readInt();
         this.shortDescription = in.readString();
         this.description = in.readString();
         this.videoURL = in.readString();
         this.thumbnailURL = in.readString();
     }
 
-    public static final Parcelable.Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
+    public static final Creator<Step> CREATOR = new Creator<Step>() {
         @Override
         public Step createFromParcel(Parcel source) {
             return new Step(source);

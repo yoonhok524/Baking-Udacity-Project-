@@ -15,13 +15,17 @@
     <string name="key_recipe" translatable="false">key_recipe</string>
     <string name="key_ingredients" translatable="false">key_ingredients</string>
     <string name="key_step" translatable="false">key_step</string>
+    <string name="key_step_size" translatable="false">key_step_size</string>
+    <string name="key_current_step" translatable="false">key_current_step</string>
 
     <string name="ingredient_num">Number of Ingredient: %1$d</string>
     <string name="step_num">Number of Step: %1$d</string>
+    <string name="serving_num">Servings: %1$d</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="recipe_ingredients">Recipe Ingredients</string>
+    <string name="recipe_step_introduction">Recipe Introduction</string>
     <string name="recipe_step_description">Recipe Step %1$d</string>
     <string name="fake_ingredient_quantity">2</string>
     <string name="fake_ingredient_measure">CUP</string>

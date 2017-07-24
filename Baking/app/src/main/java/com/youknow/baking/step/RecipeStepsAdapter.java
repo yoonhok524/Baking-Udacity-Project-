@@ -5,7 +5,6 @@ import com.youknow.baking.data.Step;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +21,9 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
     private List<Step> mSteps = new ArrayList<>();
     private Context mContext;
-    private RecipeStepsFragment.OnFragmentInteractionListener mListener;
+    private RecipeListener mListener;
 
-    public RecipeStepsAdapter(List<Step> steps, Context context, RecipeStepsFragment.OnFragmentInteractionListener listener) {
+    public RecipeStepsAdapter(List<Step> steps, Context context, RecipeListener listener) {
         mContext = context;
         mListener = listener;
         mSteps.clear();
@@ -40,8 +39,11 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mStep = mSteps.get(position);
-        holder.mTvStep.setText(mContext.getString(R.string.recipe_step_description, (position+1)));
+        Step step = mSteps.get(position);
+        int stepNum = step.getId();
+        String title = (stepNum == 0) ? mContext.getString(R.string.recipe_step_introduction) : mContext.getString(R.string.recipe_step_description, stepNum);
+        holder.mTvStep.setText(title);
+        holder.currentStep = position;
     }
 
     @Override
@@ -51,8 +53,8 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        Step mStep;
         TextView mTvStep;
+        int currentStep;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -60,7 +62,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onLoadedStep(mStep);
+                    mListener.onLoadedStep(currentStep, mSteps.size(), true);
                 }
             });
         }

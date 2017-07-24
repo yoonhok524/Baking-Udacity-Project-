@@ -28,13 +28,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.youknow.baking.R;
 import com.youknow.baking.data.Step;
+import com.youknow.baking.step.RecipeListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,12 +47,34 @@ public class StepDetailsFragment extends Fragment {
 
     @BindView(R.id.tv_short_desc) TextView mTvShortDesc;
     @BindView(R.id.exoplayer_video) SimpleExoPlayerView mPlayerView;
+    @BindView(R.id.iv_thumbnail) ImageView mIvThumbnail;
     @BindView(R.id.tv_desc) TextView mTvDesc;
     @BindView(R.id.btn_prev) Button mBtnPrev;
     @BindView(R.id.btn_next) Button mBtnNext;
 
+    RecipeListener mListener;
+    Step mStep;
+    int mCurrentStep;
+    int mStepSize;
+    private ExtractorMediaSource videoSource;
+
     public StepDetailsFragment() {
 
+    }
+
+    public static StepDetailsFragment newInstance(Context context, Step step, int currentStep, int size) {
+        StepDetailsFragment fragment = new StepDetailsFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(context.getString(R.string.key_step), step);
+        args.putInt(context.getString(R.string.key_current_step), currentStep);
+        args.putInt(context.getString(R.string.key_step_size), size);
+        fragment.setArguments(args);
+        fragment.setListener((RecipeListener) context);
+        return fragment;
+    }
+
+    public void setListener(RecipeListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -58,27 +84,40 @@ public class StepDetailsFragment extends Fragment {
         return root;
     }
 
-    public static Fragment newInstance(Context context, Step step) {
-        Fragment fragment = new StepDetailsFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(context.getString(R.string.key_step), step);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onStart() {
         super.onStart();
         if (getArguments() != null) {
-            Step step = getArguments().getParcelable(getString(R.string.key_step));
-            mTvShortDesc.setText(step.getShortDescription());
-            mTvDesc.setText(step.getDescription());
+            mStep = getArguments().getParcelable(getString(R.string.key_step));
+            mCurrentStep = getArguments().getInt(getString(R.string.key_current_step));
+            mStepSize = getArguments().getInt(getString(R.string.key_step_size));
+            mTvShortDesc.setText(mStep.getShortDescription());
+            mTvDesc.setText(mStep.getDescription());
 
-            createVideo(step.getVideoURL());
+            if (mCurrentStep == 0) {
+                mBtnPrev.setVisibility(View.GONE);
+            } else if (mCurrentStep == mStepSize-1) {
+                mBtnNext.setVisibility(View.GONE);
+            }
+            createVideo(mStep.getVideoURL());
+            showThumbnail(mStep.getThumbnailURL());
         }
     }
 
+    private void showThumbnail(String thumbnailURL) {
+        if (thumbnailURL == null || thumbnailURL.isEmpty() || thumbnailURL.endsWith(".mp4")) {
+            return;
+        }
+
+        Glide.with(this).load(thumbnailURL).into(mIvThumbnail);
+        mIvThumbnail.setVisibility(View.VISIBLE);
+    }
+
     private void createVideo(String videoUrl) {
+        if (videoUrl == null || videoUrl.isEmpty()) {
+            return;
+        }
+
         Handler mainHandler = new Handler();
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
@@ -89,15 +128,21 @@ public class StepDetailsFragment extends Fragment {
 
         mPlayerView.setPlayer(player);
 
-        // Measures bandwidth during playback. Can be null if not required.
-         DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
-        // Produces DataSource instances through which media data is loaded.
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "yourApplicationName"), defaultBandwidthMeter);
-        // Produces Extractor instances for parsing the media data.
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-        // This is the MediaSource representing the media to be played.
-        MediaSource videoSource = new ExtractorMediaSource(Uri.parse(videoUrl), dataSourceFactory, extractorsFactory, null, null);
-        // Prepare the player with the source.
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "yourApplicationName"), new DefaultBandwidthMeter());
+        videoSource = new ExtractorMediaSource(Uri.parse(videoUrl), dataSourceFactory, new DefaultExtractorsFactory(), null, null);
         player.prepare(videoSource);
+
+        mPlayerView.setVisibility(View.VISIBLE);
     }
+
+    @OnClick(R.id.btn_prev)
+    public void onClickPrev() {
+        mListener.onLoadedStep(mCurrentStep-1, mStepSize, false);
+    }
+
+    @OnClick(R.id.btn_next)
+    public void onClickNext() {
+        mListener.onLoadedStep(mCurrentStep+1, mStepSize, false);
+    }
+
 }

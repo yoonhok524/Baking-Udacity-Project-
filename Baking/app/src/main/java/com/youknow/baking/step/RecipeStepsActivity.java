@@ -1,8 +1,6 @@
 package com.youknow.baking.step;
 
-import android.net.Uri;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +15,7 @@ import com.youknow.baking.step.details.step.StepDetailsFragment;
 
 import java.util.List;
 
-public class RecipeStepsActivity extends AppCompatActivity implements RecipeStepsFragment.OnFragmentInteractionListener {
+public class RecipeStepsActivity extends AppCompatActivity implements RecipeListener {
 
     private Recipe mRecipe;
 
@@ -34,8 +32,9 @@ public class RecipeStepsActivity extends AppCompatActivity implements RecipeStep
         args.putParcelable(getString(R.string.key_recipe), mRecipe);
         fragment.setArguments(args);
 
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
     }
 
     @Override
@@ -48,11 +47,16 @@ public class RecipeStepsActivity extends AppCompatActivity implements RecipeStep
     }
 
     @Override
-    public void onLoadedStep(Step step) {
-        Fragment fragment = StepDetailsFragment.newInstance(this, step);
+    public void onLoadedStep(int currentStep, int size, boolean addToBackStack) {
+        Step step = mRecipe.getSteps().get(currentStep);
+        StepDetailsFragment fragment = StepDetailsFragment.newInstance(this, step, currentStep, size);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
         ft.addToBackStack(null);
+        if (!addToBackStack) {
+            getSupportFragmentManager().popBackStack();
+        }
         ft.commit();
     }
+
 }

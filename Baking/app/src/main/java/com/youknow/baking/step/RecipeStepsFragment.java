@@ -1,29 +1,23 @@
 package com.youknow.baking.step;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.youknow.baking.R;
-import com.youknow.baking.data.Ingredient;
 import com.youknow.baking.data.Recipe;
-import com.youknow.baking.data.Step;
-
-import java.util.List;
+import com.youknow.baking.step.details.step.StepListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class RecipeStepsFragment extends Fragment {
+public class RecipeStepsFragment extends Fragment implements StepListener {
 
     private static Context mContext;
 
@@ -32,11 +26,11 @@ public class RecipeStepsFragment extends Fragment {
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
-    private OnFragmentInteractionListener mListener;
+    private RecipeListener mListener;
     private Recipe mRecipe;
 
     public RecipeStepsFragment() {
-        mListener = (OnFragmentInteractionListener) mContext;
+        mListener = (RecipeListener) mContext;
     }
 
     public static RecipeStepsFragment newInstance(Context context, Recipe recipe) {
@@ -75,8 +69,14 @@ public class RecipeStepsFragment extends Fragment {
         }
     }
 
-    public interface OnFragmentInteractionListener {
-        void onLoadedIngredients(List<Ingredient> ingredients);
-        void onLoadedStep(Step step);
+    @Override
+    public void onClickPrev() {
+
     }
+
+    @Override
+    public void onClickNext() {
+
+    }
+
 }
