@@ -1,12 +1,10 @@
-package com.youknow.baking.step.details.step;
+package com.youknow.baking.recipes.steps.details;
 
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -17,6 +15,11 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+
+import com.bumptech.glide.Glide;
+import com.youknow.baking.R;
+import com.youknow.baking.data.Step;
+import com.youknow.baking.recipes.StepListener;
 
 import android.content.Context;
 import android.net.Uri;
@@ -30,11 +33,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.youknow.baking.R;
-import com.youknow.baking.data.Step;
-import com.youknow.baking.step.RecipeListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,7 +50,7 @@ public class StepDetailsFragment extends Fragment {
     @BindView(R.id.btn_prev) Button mBtnPrev;
     @BindView(R.id.btn_next) Button mBtnNext;
 
-    RecipeListener mListener;
+    StepListener mListener;
     Step mStep;
     int mCurrentStep;
     int mStepSize;
@@ -62,31 +60,11 @@ public class StepDetailsFragment extends Fragment {
 
     }
 
-    public static StepDetailsFragment newInstance(Context context, Step step, int currentStep, int size) {
-        StepDetailsFragment fragment = new StepDetailsFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(context.getString(R.string.key_step), step);
-        args.putInt(context.getString(R.string.key_current_step), currentStep);
-        args.putInt(context.getString(R.string.key_step_size), size);
-        fragment.setArguments(args);
-        fragment.setListener((RecipeListener) context);
-        return fragment;
-    }
-
-    public void setListener(RecipeListener listener) {
-        mListener = listener;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_step_details, container, false);
         ButterKnife.bind(this, root);
-        return root;
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
         if (getArguments() != null) {
             mStep = getArguments().getParcelable(getString(R.string.key_step));
             mCurrentStep = getArguments().getInt(getString(R.string.key_current_step));
@@ -96,12 +74,20 @@ public class StepDetailsFragment extends Fragment {
 
             if (mCurrentStep == 0) {
                 mBtnPrev.setVisibility(View.GONE);
-            } else if (mCurrentStep == mStepSize-1) {
+            } else if (mCurrentStep == mStepSize - 1) {
                 mBtnNext.setVisibility(View.GONE);
             }
             createVideo(mStep.getVideoURL());
             showThumbnail(mStep.getThumbnailURL());
         }
+
+        return root;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mListener = (StepListener) context;
     }
 
     private void showThumbnail(String thumbnailURL) {
@@ -118,12 +104,10 @@ public class StepDetailsFragment extends Fragment {
             return;
         }
 
-        Handler mainHandler = new Handler();
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
-        // 2. Create the player
         SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
 
         mPlayerView.setPlayer(player);
@@ -137,12 +121,28 @@ public class StepDetailsFragment extends Fragment {
 
     @OnClick(R.id.btn_prev)
     public void onClickPrev() {
-        mListener.onLoadedStep(mCurrentStep-1, mStepSize, false);
+        mListener.onStepSelected(mCurrentStep - 1);
     }
 
     @OnClick(R.id.btn_next)
     public void onClickNext() {
-        mListener.onLoadedStep(mCurrentStep+1, mStepSize, false);
+        mListener.onStepSelected(mCurrentStep + 1);
     }
 
+    public void update() {
+        Bundle args = new Bundle();
+        mStep = args.getParcelable(getString(R.string.key_step));
+        mCurrentStep = args.getInt(getString(R.string.key_current_step));
+        mStepSize = args.getInt(getString(R.string.key_step_size));
+        mTvShortDesc.setText(mStep.getShortDescription());
+        mTvDesc.setText(mStep.getDescription());
+
+        if (mCurrentStep == 0) {
+            mBtnPrev.setVisibility(View.GONE);
+        } else if (mCurrentStep == mStepSize) {
+            mBtnNext.setVisibility(View.GONE);
+        }
+        createVideo(mStep.getVideoURL());
+        showThumbnail(mStep.getThumbnailURL());
+    }
 }

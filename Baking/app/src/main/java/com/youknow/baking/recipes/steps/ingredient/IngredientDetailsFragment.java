@@ -1,4 +1,4 @@
-package com.youknow.baking.step.details.ingredient;
+package com.youknow.baking.recipes.steps.ingredient;
 
 
 import android.content.Context;

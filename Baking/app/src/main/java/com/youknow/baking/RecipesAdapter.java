@@ -2,7 +2,7 @@ package com.youknow.baking;
 
 import com.squareup.picasso.Picasso;
 import com.youknow.baking.data.Recipe;
-import com.youknow.baking.step.RecipeStepsActivity;
+import com.youknow.baking.recipes.RecipeStepsActivity;
 
 import android.content.Context;
 import android.content.Intent;

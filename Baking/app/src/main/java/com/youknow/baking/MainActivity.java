@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @BindView(R.id.progress_bar) ProgressBar mProgressBar;
     @BindView(R.id.rv_recipes) RecyclerView mRvRecipes;
     RecipesAdapter mRecipesAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
 
     private MainContract.Presenter mPresenter;
 
@@ -35,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mPresenter = new MainPresenter(this);
 
         mRvRecipes.setHasFixedSize(true);
-        mLayoutManager = new GridLayoutManager(this, 1);
-        mRvRecipes.setLayoutManager(mLayoutManager);
         mRecipesAdapter = new RecipesAdapter(this);
         mRvRecipes.setAdapter(mRecipesAdapter);
     }

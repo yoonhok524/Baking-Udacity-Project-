@@ -1,4 +1,4 @@
-package com.youknow.baking.step.details.ingredient;
+package com.youknow.baking.recipes.steps.ingredient;
 
 import com.youknow.baking.R;
 import com.youknow.baking.data.Ingredient;

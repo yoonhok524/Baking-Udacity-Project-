@@ -31,5 +31,6 @@
     <string name="fake_ingredient_measure">CUP</string>
     <string name="prev">Previous</string>
     <string name="next">Next</string>
+    <string name="steps">Steps</string>
 
 </resources>
