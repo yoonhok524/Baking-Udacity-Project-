@@ -15,6 +15,7 @@ public class RecipeStepsFragment extends ListFragment {
     private static RecipeStepsFragment INSTANCE = null;
 
     private StepListener mListener;
+    private View prevView;
 
     public RecipeStepsFragment() {
 
@@ -34,6 +35,7 @@ public class RecipeStepsFragment extends ListFragment {
 
         View tvHeader = View.inflate(getContext(), R.layout.header_steps, null);
         getListView().addHeaderView(tvHeader);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
     @Override
@@ -49,6 +51,13 @@ public class RecipeStepsFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         setSelection((int) id);
+        if (prevView != null) {
+            prevView.setSelected(false);
+            prevView.setBackgroundResource(0);
+        }
+        v.setSelected(true);
+        v.setBackgroundResource(R.color.selectedItem);
+        prevView=v;
     }
 
     @Override
@@ -57,40 +66,11 @@ public class RecipeStepsFragment extends ListFragment {
         mListener.onStepSelected(position);
     }
 
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume");
-    }
-
     @Override
     public void onStart() {
         super.onStart();
-        Log.i(TAG, "onStart");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i(TAG, "onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.i(TAG, "onDetach");
+        if (prevView != null) {
+            prevView.setBackgroundResource(0);
+        }
     }
 }

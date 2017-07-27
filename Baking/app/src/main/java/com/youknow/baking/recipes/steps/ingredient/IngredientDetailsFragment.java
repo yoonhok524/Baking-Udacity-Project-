@@ -54,7 +54,6 @@ public class IngredientDetailsFragment extends Fragment {
 
     @Override
     public void onStart() {
-        Log.i(TAG, "onStart");
         super.onStart();
         mLayoutManager = new LinearLayoutManager(getContext());
         rvIngredients.setLayoutManager(mLayoutManager);
@@ -65,35 +64,5 @@ public class IngredientDetailsFragment extends Fragment {
             mIngredientAdapter = new IngredientAdapter(mIngredients, getContext());
             rvIngredients.setAdapter(mIngredientAdapter);
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i(TAG, "onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.i(TAG, "onDetach");
     }
 }

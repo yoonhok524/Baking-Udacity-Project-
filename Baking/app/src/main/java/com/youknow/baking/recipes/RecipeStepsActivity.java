@@ -32,7 +32,6 @@ public class RecipeStepsActivity extends AppCompatActivity implements StepListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_steps);
 
