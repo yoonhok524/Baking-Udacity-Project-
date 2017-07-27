@@ -15,7 +15,6 @@ public class RecipeStepsFragment extends ListFragment {
     private static RecipeStepsFragment INSTANCE = null;
 
     private StepListener mListener;
-    private View prevView;
 
     public RecipeStepsFragment() {
 
@@ -51,13 +50,6 @@ public class RecipeStepsFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         setSelection((int) id);
-        if (prevView != null) {
-            prevView.setSelected(false);
-            prevView.setBackgroundResource(0);
-        }
-        v.setSelected(true);
-        v.setBackgroundResource(R.color.selectedItem);
-        prevView=v;
     }
 
     @Override
@@ -66,11 +58,4 @@ public class RecipeStepsFragment extends ListFragment {
         mListener.onStepSelected(position);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (prevView != null) {
-            prevView.setBackgroundResource(0);
-        }
-    }
 }
