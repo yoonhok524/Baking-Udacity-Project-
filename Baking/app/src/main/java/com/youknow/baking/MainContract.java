@@ -12,6 +12,8 @@ public interface MainContract {
     interface View {
 
         void onLoadedRecipes(List<Recipe> recipes);
+
+        void onDisconnectedNetwork();
     }
 
     interface Presenter {

@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import butterknife.ButterKnife;
  */
 public class IngredientDetailsFragment extends Fragment {
 
+    private static final String TAG = "IngredientDetailsFragme";
+
     @BindView(R.id.rv_ingredients) RecyclerView rvIngredients;
     IngredientAdapter mIngredientAdapter;
     RecyclerView.LayoutManager mLayoutManager;
@@ -37,6 +40,7 @@ public class IngredientDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_ingredient_details, container, false);
         ButterKnife.bind(this, root);
+        getActivity().setTitle(getString(R.string.ingredients));
         return root;
     }
 
@@ -50,6 +54,7 @@ public class IngredientDetailsFragment extends Fragment {
 
     @Override
     public void onStart() {
+        Log.i(TAG, "onStart");
         super.onStart();
         mLayoutManager = new LinearLayoutManager(getContext());
         rvIngredients.setLayoutManager(mLayoutManager);
@@ -60,5 +65,35 @@ public class IngredientDetailsFragment extends Fragment {
             mIngredientAdapter = new IngredientAdapter(mIngredients, getContext());
             rvIngredients.setAdapter(mIngredientAdapter);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(TAG, "onDetach");
     }
 }

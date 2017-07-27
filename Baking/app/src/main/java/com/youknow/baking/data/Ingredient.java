@@ -10,6 +10,9 @@ import lombok.Data;
  */
 @Data
 public class Ingredient implements Parcelable {
+
+    public static final int ID_INGREDIENT = -1;
+
     float quantity;
     String measure;
     String ingredient;

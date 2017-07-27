@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @BindView(R.id.progress_bar) ProgressBar mProgressBar;
     @BindView(R.id.rv_recipes) RecyclerView mRvRecipes;
+    @BindView(R.id.tv_network_disconnected) TextView mTvNetworkDisconnected;
     RecipesAdapter mRecipesAdapter;
 
     private MainContract.Presenter mPresenter;
@@ -49,5 +51,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     public void onLoadedRecipes(List<Recipe> recipes) {
         mRecipesAdapter.update(recipes);
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDisconnectedNetwork() {
+        mProgressBar.setVisibility(View.GONE);
+        mTvNetworkDisconnected.setVisibility(View.VISIBLE);
     }
 }

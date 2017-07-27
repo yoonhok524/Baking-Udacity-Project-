@@ -43,6 +43,8 @@ import butterknife.OnClick;
  */
 public class StepDetailsFragment extends Fragment {
 
+    private static final String TAG = StepDetailsFragment.class.getSimpleName();
+
     @BindView(R.id.tv_short_desc) TextView mTvShortDesc;
     @BindView(R.id.exoplayer_video) SimpleExoPlayerView mPlayerView;
     @BindView(R.id.iv_thumbnail) ImageView mIvThumbnail;
@@ -64,6 +66,8 @@ public class StepDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_step_details, container, false);
         ButterKnife.bind(this, root);
+
+        getActivity().setTitle(getString(R.string.steps));
 
         if (getArguments() != null) {
             mStep = getArguments().getParcelable(getString(R.string.key_step));
@@ -144,5 +148,41 @@ public class StepDetailsFragment extends Fragment {
         }
         createVideo(mStep.getVideoURL());
         showThumbnail(mStep.getThumbnailURL());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(TAG, "onDetach");
     }
 }
