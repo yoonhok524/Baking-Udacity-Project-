@@ -1,8 +1,12 @@
 package com.youknow.baking;
 
+import com.google.gson.Gson;
+
 import com.youknow.baking.IdlingResource.SimpleIdlingResource;
 import com.youknow.baking.data.Recipe;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
@@ -70,6 +74,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void onLoadedRecipes(List<Recipe> recipes) {
+        SharedPreferences pref = getSharedPreferences(getString(R.string.key_recipe), Context.MODE_PRIVATE);
+        String jsonRecipe = pref.getString(getString(R.string.key_recipe), null);
+        if (jsonRecipe == null) {
+            Recipe recipe = recipes.get(0);
+            jsonRecipe = new Gson().toJson(recipe);
+            pref.edit().putString(getString(R.string.key_recipe), jsonRecipe).commit();
+        }
+
         mRecipesAdapter.update(recipes);
         mProgressBar.setVisibility(View.GONE);
     }

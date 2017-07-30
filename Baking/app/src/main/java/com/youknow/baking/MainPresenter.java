@@ -36,7 +36,7 @@ public class MainPresenter implements MainContract.Presenter {
         mIdlingResource = idlingResource;
 
         if (isNetworkConnected(mContext)) {
-            new FetchRecipes().execute();
+            new FetchRecipes(mIdlingResource, mView).execute();
         } else {
             mView.onOccurredError(MainContract.ErrorType.NETWORK_DISCONNECT);
         }
@@ -48,35 +48,4 @@ public class MainPresenter implements MainContract.Presenter {
         return (activeNetwork == null) ? false : true;
     }
 
-    private class FetchRecipes extends AsyncTask<Void, Void, List<Recipe>> {
-
-        private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
-
-        @Override
-        protected List<Recipe> doInBackground(Void... params) {
-            if (mIdlingResource != null) {
-                mIdlingResource.setIdleState(false);
-            }
-
-            String rawData = HttpUtil.getResponseFromHttpUrl(BASE_URL);
-            Gson gson = new GsonBuilder().create();
-
-            List<Recipe> recipes = gson.fromJson(rawData, new TypeToken<List<Recipe>>(){}.getType());
-            return recipes;
-        }
-
-        @Override
-        protected void onPostExecute(List<Recipe> recipes) {
-            super.onPostExecute(recipes);
-
-            if (recipes == null) {
-                mView.onOccurredError(MainContract.ErrorType.WRONG_DATA);
-            } else {
-                mView.onLoadedRecipes(recipes);
-                if (mIdlingResource != null) {
-                    mIdlingResource.setIdleState(true);
-                }
-            }
-        }
-    }
 }

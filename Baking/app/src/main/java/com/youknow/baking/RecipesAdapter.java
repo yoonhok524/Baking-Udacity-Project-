@@ -1,11 +1,16 @@
 package com.youknow.baking;
 
+import com.google.gson.Gson;
+
 import com.squareup.picasso.Picasso;
 import com.youknow.baking.data.Recipe;
 import com.youknow.baking.recipes.RecipeStepsActivity;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
@@ -13,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,9 +89,19 @@ public class RecipesAdapter extends Adapter<RecipesAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    SharedPreferences pref = mContext.getSharedPreferences(mContext.getString(R.string.key_recipe), Context.MODE_PRIVATE);
+                    String jsonRecipe = mRecipe == null ? null : new Gson().toJson(mRecipe);
+                    pref.edit().putString(mContext.getString(R.string.key_recipe), jsonRecipe).commit();
+
+                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(mContext);
+                    int[] ids = widgetManager.getAppWidgetIds(new ComponentName(mContext, RecipeWidget.class));
+                    RecipeWidget.updateAppWidgets(mContext, widgetManager, ids, mRecipe);
+
                     Intent intent = new Intent(mContext, RecipeStepsActivity.class);
                     intent.putExtra(mContext.getString(R.string.key_recipe), mRecipe);
                     mContext.startActivity(intent);
+
+                    Toast.makeText(mContext, mContext.getString(R.string.widget_updated), Toast.LENGTH_SHORT).show();
                 }
             });
         }

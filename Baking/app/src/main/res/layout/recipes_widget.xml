@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:padding="@dimen/widget_margin"
+        android:background="#09c">
+
+    <TextView
+            android:id="@+id/appwidget_ingredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            tools:text="Yellow Cake"
+            android:drawableTop="@drawable/ic_recipe_menu"
+            style="@style/TextAppearance.AppCompat.Title"/>
+
+</RelativeLayout>
