@@ -8,7 +8,6 @@ import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -25,6 +24,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,7 +105,7 @@ public class StepDetailsFragment extends Fragment {
     }
 
     private void showThumbnail(String thumbnailURL) {
-        if (thumbnailURL == null || thumbnailURL.isEmpty() || thumbnailURL.endsWith(".mp4")) {
+        if (TextUtils.isEmpty(thumbnailURL) || thumbnailURL.endsWith(".mp4")) {
             return;
         }
 
@@ -114,7 +114,7 @@ public class StepDetailsFragment extends Fragment {
     }
 
     private void createVideo(String videoUrl) {
-        if (videoUrl == null || videoUrl.isEmpty()) {
+        if (TextUtils.isEmpty(videoUrl)) {
             return;
         }
 
