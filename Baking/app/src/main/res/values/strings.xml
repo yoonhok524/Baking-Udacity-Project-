@@ -33,5 +33,6 @@
     <string name="steps">Steps</string>
     <string name="network_is_disconnected">Network is disconnected!</string>
     <string name="ingredients">Ingredients</string>
+    <string name="wrong_data">Data is invalid!</string>
 
 </resources>

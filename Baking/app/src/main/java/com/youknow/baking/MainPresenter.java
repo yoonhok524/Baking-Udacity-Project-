@@ -22,6 +22,7 @@ import java.util.List;
 
 public class MainPresenter implements MainContract.Presenter {
 
+    private static final String TAG = MainPresenter.class.getSimpleName();
     MainContract.View mView;
     Context mContext;
 
@@ -35,7 +36,7 @@ public class MainPresenter implements MainContract.Presenter {
         if (isNetworkConnected(mContext)) {
             new FetchRecipes().execute();
         } else {
-            mView.onDisconnectedNetwork();
+            mView.onOccurredError(MainContract.ErrorType.NETWORK_DISCONNECT);
         }
     }
 
@@ -61,7 +62,12 @@ public class MainPresenter implements MainContract.Presenter {
         @Override
         protected void onPostExecute(List<Recipe> recipes) {
             super.onPostExecute(recipes);
-            mView.onLoadedRecipes(recipes);
+
+            if (recipes == null) {
+                mView.onOccurredError(MainContract.ErrorType.WRONG_DATA);
+            } else {
+                mView.onLoadedRecipes(recipes);
+            }
         }
     }
 }

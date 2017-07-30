@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @BindView(R.id.progress_bar) ProgressBar mProgressBar;
     @BindView(R.id.rv_recipes) RecyclerView mRvRecipes;
     @BindView(R.id.tv_network_disconnected) TextView mTvNetworkDisconnected;
+    @BindView(R.id.tv_wrong_data) TextView mTvWrongData;
     RecipesAdapter mRecipesAdapter;
 
     private MainContract.Presenter mPresenter;
@@ -54,8 +55,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void onDisconnectedNetwork() {
+    public void onOccurredError(MainContract.ErrorType type) {
         mProgressBar.setVisibility(View.GONE);
-        mTvNetworkDisconnected.setVisibility(View.VISIBLE);
+        switch (type) {
+            case NETWORK_DISCONNECT:
+                mTvNetworkDisconnected.setVisibility(View.VISIBLE);
+                break;
+            case WRONG_DATA:
+                mTvWrongData.setVisibility(View.VISIBLE);
+                break;
+        }
     }
+
 }

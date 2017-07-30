@@ -9,11 +9,16 @@ import java.util.List;
  */
 
 public interface MainContract {
+    public enum ErrorType {
+        NETWORK_DISCONNECT,
+        WRONG_DATA
+    }
+
     interface View {
 
         void onLoadedRecipes(List<Recipe> recipes);
 
-        void onDisconnectedNetwork();
+        void onOccurredError(ErrorType type);
     }
 
     interface Presenter {
