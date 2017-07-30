@@ -24,9 +24,7 @@ import com.youknow.baking.recipes.StepListener;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +55,8 @@ public class StepDetailsFragment extends Fragment {
     int mCurrentStep;
     int mStepSize;
     private ExtractorMediaSource videoSource;
+    private SimpleExoPlayer mPlayer;
+    private DefaultTrackSelector mTrackSelector;
 
     public StepDetailsFragment() {
 
@@ -94,6 +94,16 @@ public class StepDetailsFragment extends Fragment {
         mListener = (StepListener) context;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mPlayer != null) {
+            mPlayer.release();
+            mPlayer = null;
+            mTrackSelector = null;
+        }
+    }
+
     private void showThumbnail(String thumbnailURL) {
         if (thumbnailURL == null || thumbnailURL.isEmpty() || thumbnailURL.endsWith(".mp4")) {
             return;
@@ -110,15 +120,15 @@ public class StepDetailsFragment extends Fragment {
 
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+        mTrackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
-        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
+        mPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), mTrackSelector);
 
-        mPlayerView.setPlayer(player);
+        mPlayerView.setPlayer(mPlayer);
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "yourApplicationName"), new DefaultBandwidthMeter());
         videoSource = new ExtractorMediaSource(Uri.parse(videoUrl), dataSourceFactory, new DefaultExtractorsFactory(), null, null);
-        player.prepare(videoSource);
+        mPlayer.prepare(videoSource);
 
         mPlayerView.setVisibility(View.VISIBLE);
     }
