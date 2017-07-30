@@ -1,5 +1,6 @@
 package com.youknow.baking;
 
+import com.youknow.baking.IdlingResource.SimpleIdlingResource;
 import com.youknow.baking.data.Recipe;
 
 import java.util.List;
@@ -23,6 +24,6 @@ public interface MainContract {
 
     interface Presenter {
 
-        void fetchRecipes();
+        void fetchRecipes(SimpleIdlingResource idlingResource);
     }
 }

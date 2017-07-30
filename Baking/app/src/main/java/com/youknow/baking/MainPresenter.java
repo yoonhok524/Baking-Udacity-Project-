@@ -4,15 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import com.youknow.baking.IdlingResource.SimpleIdlingResource;
 import com.youknow.baking.data.Recipe;
-import com.youknow.baking.data.Step;
 import com.youknow.baking.utils.HttpUtil;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.List;
 
@@ -25,6 +24,7 @@ public class MainPresenter implements MainContract.Presenter {
     private static final String TAG = MainPresenter.class.getSimpleName();
     MainContract.View mView;
     Context mContext;
+    SimpleIdlingResource mIdlingResource;
 
     public MainPresenter(MainContract.View view) {
         mView = view;
@@ -32,7 +32,9 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void fetchRecipes() {
+    public void fetchRecipes(SimpleIdlingResource idlingResource) {
+        mIdlingResource = idlingResource;
+
         if (isNetworkConnected(mContext)) {
             new FetchRecipes().execute();
         } else {
@@ -52,6 +54,10 @@ public class MainPresenter implements MainContract.Presenter {
 
         @Override
         protected List<Recipe> doInBackground(Void... params) {
+            if (mIdlingResource != null) {
+                mIdlingResource.setIdleState(false);
+            }
+
             String rawData = HttpUtil.getResponseFromHttpUrl(BASE_URL);
             Gson gson = new GsonBuilder().create();
 
@@ -67,6 +73,9 @@ public class MainPresenter implements MainContract.Presenter {
                 mView.onOccurredError(MainContract.ErrorType.WRONG_DATA);
             } else {
                 mView.onLoadedRecipes(recipes);
+                if (mIdlingResource != null) {
+                    mIdlingResource.setIdleState(true);
+                }
             }
         }
     }
