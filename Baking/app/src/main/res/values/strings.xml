@@ -17,6 +17,7 @@
     <string name="key_step" translatable="false">key_step</string>
     <string name="key_step_size" translatable="false">key_step_size</string>
     <string name="key_current_step" translatable="false">key_current_step</string>
+    <string name="key_ingredient_position" translatable="false">key_ingredient_position</string>
 
     <string name="ingredient_num">Number of Ingredient: %1$d</string>
     <string name="step_num">Number of Step: %1$d</string>

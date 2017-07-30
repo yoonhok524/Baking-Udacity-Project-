@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,12 @@ import static com.youknow.baking.data.Ingredient.ID_INGREDIENT;
 
 public class DetailsActivity extends AppCompatActivity implements StepListener {
 
+    private static final String TAG = DetailsActivity.class.getSimpleName();
+
     List<Ingredient> mIngredients;
     int mCurrentId;
     Recipe mRecipe;
+    private Fragment ingredientFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +42,24 @@ public class DetailsActivity extends AppCompatActivity implements StepListener {
             if (mRecipe != null) {
                 showDetailsStep();
             } else {
-                Fragment fragment = IngredientDetailsFragment.newInstance(this, mIngredients);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.details_container, fragment)
-                        .commit();
+                if (ingredientFragment == null) {
+                    ingredientFragment = IngredientDetailsFragment.newInstance(this, mIngredients);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.details_container, ingredientFragment)
+                            .commit();
+                }
+
             }
         } else {
             Intent intent = getIntent();
             if (intent.hasExtra(getString(R.string.key_ingredients))) {
                 mIngredients = intent.getParcelableArrayListExtra(getString(R.string.key_ingredients));
-                Fragment fragment = IngredientDetailsFragment.newInstance(this, mIngredients);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.details_container, fragment)
-                        .commit();
+                if (ingredientFragment == null) {
+                    ingredientFragment = IngredientDetailsFragment.newInstance(this, mIngredients);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.details_container, ingredientFragment)
+                            .commit();
+                }
             } else {
                 mCurrentId = intent.getIntExtra(getString(R.string.key_current_step), 0);
                 mRecipe = intent.getParcelableExtra(getString(R.string.key_recipe));
