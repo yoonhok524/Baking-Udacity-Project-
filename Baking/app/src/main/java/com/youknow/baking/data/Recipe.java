@@ -1,5 +1,7 @@
 package com.youknow.baking.data;
 
+import com.google.gson.annotations.SerializedName;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -18,6 +20,7 @@ public class Recipe implements Parcelable {
     List<Ingredient> ingredients;
     List<Step> steps;
     int servings;
+    @SerializedName("image")
     String imageUrl;
 
     @Override
