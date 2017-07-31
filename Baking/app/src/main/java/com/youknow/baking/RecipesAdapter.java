@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.youknow.baking.data.Recipe;
 import com.youknow.baking.recipes.RecipeStepsActivity;
+import com.youknow.baking.widget.RecipeWidget;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;

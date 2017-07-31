@@ -33,8 +33,8 @@ public class Recipe implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.name);
-        dest.writeList(this.ingredients);
-        dest.writeList(this.steps);
+        dest.writeTypedList(this.ingredients);
+        dest.writeTypedList(this.steps);
         dest.writeInt(this.servings);
         dest.writeString(this.imageUrl);
     }
@@ -42,15 +42,13 @@ public class Recipe implements Parcelable {
     protected Recipe(Parcel in) {
         this.id = in.readString();
         this.name = in.readString();
-        this.ingredients = new ArrayList<Ingredient>();
-        in.readList(this.ingredients, Ingredient.class.getClassLoader());
-        this.steps = new ArrayList<Step>();
-        in.readList(this.steps, Step.class.getClassLoader());
+        this.ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+        this.steps = in.createTypedArrayList(Step.CREATOR);
         this.servings = in.readInt();
         this.imageUrl = in.readString();
     }
 
-    public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
         @Override
         public Recipe createFromParcel(Parcel source) {
             return new Recipe(source);
