@@ -1,10 +1,12 @@
 package com.youknow.baking.recipes.steps.details;
 
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -25,6 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,13 +53,15 @@ public class StepDetailsFragment extends Fragment {
     @BindView(R.id.btn_prev) Button mBtnPrev;
     @BindView(R.id.btn_next) Button mBtnNext;
 
-    StepListener mListener;
-    Step mStep;
-    int mCurrentStep;
-    int mStepSize;
-    private ExtractorMediaSource videoSource;
+    private StepListener mListener;
+    private Step mStep;
+    private int mCurrentStep;
+    private int mStepSize;
+    private MediaSource videoSource;
     private SimpleExoPlayer mPlayer;
     private DefaultTrackSelector mTrackSelector;
+    private int resumeWindow;
+    private long resumePosition;
 
     public StepDetailsFragment() {
 
@@ -70,20 +75,22 @@ public class StepDetailsFragment extends Fragment {
         getActivity().setTitle(getString(R.string.steps));
 
         if (getArguments() != null) {
+            Log.d(TAG, "onCreateView - getArguments not null");
             mStep = getArguments().getParcelable(getString(R.string.key_step));
             mCurrentStep = getArguments().getInt(getString(R.string.key_current_step));
             mStepSize = getArguments().getInt(getString(R.string.key_step_size));
-            mTvShortDesc.setText(mStep.getShortDescription());
-            mTvDesc.setText(mStep.getDescription());
-
-            if (mCurrentStep == 0) {
-                mBtnPrev.setVisibility(View.GONE);
-            } else if (mCurrentStep == mStepSize - 1) {
-                mBtnNext.setVisibility(View.GONE);
-            }
-            createVideo(mStep.getVideoURL());
-            showThumbnail(mStep.getThumbnailURL());
         }
+
+        mTvShortDesc.setText(mStep.getShortDescription());
+        mTvDesc.setText(mStep.getDescription());
+
+        if (mCurrentStep == 0) {
+            mBtnPrev.setVisibility(View.GONE);
+        } else if (mCurrentStep == mStepSize - 1) {
+            mBtnNext.setVisibility(View.GONE);
+        }
+
+        showThumbnail(mStep.getThumbnailURL());
 
         return root;
     }
@@ -95,13 +102,25 @@ public class StepDetailsFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        createVideo(mStep.getVideoURL());
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         if (mPlayer != null) {
+            updateResumePosition();
             mPlayer.release();
             mPlayer = null;
             mTrackSelector = null;
         }
+    }
+
+    private void updateResumePosition() {
+        resumeWindow = mPlayer.getCurrentWindowIndex();
+        resumePosition = mPlayer.isCurrentWindowSeekable() ? Math.max(0, mPlayer.getCurrentPosition()) : C.TIME_UNSET;
     }
 
     private void showThumbnail(String thumbnailURL) {
@@ -128,7 +147,11 @@ public class StepDetailsFragment extends Fragment {
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "yourApplicationName"), new DefaultBandwidthMeter());
         videoSource = new ExtractorMediaSource(Uri.parse(videoUrl), dataSourceFactory, new DefaultExtractorsFactory(), null, null);
-        mPlayer.prepare(videoSource);
+        boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
+        if (haveResumePosition) {
+            mPlayer.seekTo(resumeWindow, resumePosition);
+        }
+        mPlayer.prepare(videoSource, !haveResumePosition, false);
 
         mPlayerView.setVisibility(View.VISIBLE);
     }
@@ -143,20 +166,4 @@ public class StepDetailsFragment extends Fragment {
         mListener.onStepSelected(mCurrentStep + 1);
     }
 
-    public void update() {
-        Bundle args = new Bundle();
-        mStep = args.getParcelable(getString(R.string.key_step));
-        mCurrentStep = args.getInt(getString(R.string.key_current_step));
-        mStepSize = args.getInt(getString(R.string.key_step_size));
-        mTvShortDesc.setText(mStep.getShortDescription());
-        mTvDesc.setText(mStep.getDescription());
-
-        if (mCurrentStep == 0) {
-            mBtnPrev.setVisibility(View.GONE);
-        } else if (mCurrentStep == mStepSize) {
-            mBtnNext.setVisibility(View.GONE);
-        }
-        createVideo(mStep.getVideoURL());
-        showThumbnail(mStep.getThumbnailURL());
-    }
 }

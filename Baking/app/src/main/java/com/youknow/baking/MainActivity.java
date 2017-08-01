@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         if (jsonRecipe == null) {
             Recipe recipe = recipes.get(0);
             jsonRecipe = new Gson().toJson(recipe);
-            pref.edit().putString(getString(R.string.key_recipe), jsonRecipe).commit();
+            pref.edit().putString(getString(R.string.key_recipe), jsonRecipe).apply();
         }
 
         mRecipesAdapter.update(recipes);

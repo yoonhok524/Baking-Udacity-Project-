@@ -92,7 +92,7 @@ public class RecipesAdapter extends Adapter<RecipesAdapter.ViewHolder> {
                 public void onClick(View v) {
                     SharedPreferences pref = mContext.getSharedPreferences(mContext.getString(R.string.key_recipe), Context.MODE_PRIVATE);
                     String jsonRecipe = mRecipe == null ? null : new Gson().toJson(mRecipe);
-                    pref.edit().putString(mContext.getString(R.string.key_recipe), jsonRecipe).commit();
+                    pref.edit().putString(mContext.getString(R.string.key_recipe), jsonRecipe).apply();
 
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(mContext);
                     int[] ids = widgetManager.getAppWidgetIds(new ComponentName(mContext, RecipeWidget.class));

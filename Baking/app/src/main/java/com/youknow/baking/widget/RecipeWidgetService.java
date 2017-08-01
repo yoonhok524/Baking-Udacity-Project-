@@ -48,7 +48,9 @@ class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
     public void onCreate() {
         mRecipe = getRecipe(mContext);
         mIngredients.clear();
-        mIngredients.addAll(mRecipe.getIngredients());
+        if (mRecipe != null) {
+            mIngredients.addAll(mRecipe.getIngredients());
+        }
     }
 
     @Override
