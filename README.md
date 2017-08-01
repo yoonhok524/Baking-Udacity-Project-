@@ -8,7 +8,7 @@ This app fetch some recipe data from Udacity network. (https://d17h27t6h515a5.cl
 This data is given by Udacity.
 
 It shows the recipe in multi screen like mobile phone and tablet.<br />
-To implement this, I refer to the android document (https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json)<br />
+To implement this, I refer to the android document (https://developer.android.com/guide/practices/tablets-and-handsets.html)<br />
 ![Tablet](https://lh3.googleusercontent.com/28qvGWhChPbyuT7Dhz8zelgjHj1nJciT7vZUc4vbSBcz9-pEv-yGM5CyQe0tprODnxMOylLJA6keNSjbLIP-OjGp2c3KZNBkcuLmf7L0X2WAgL9O7I5gaZx3H8K_PZD9eXZy4La_Q8OhrtGnlHsLkQyHpCJ6foEI29tBuD9lT5W2OxxcZA_YTK03vE2EFp_lwWvzT3mUiA0BLPT4iqcxPsy825ZTkCeC8y-HXx6F3623KHHg6PhfEjuIPqsFYeRrNXo-VldF5fgTW-rKxo754KLBnb07anbmlZRev3sz4fj2KV1b1cUe0959VILZbUnxJKWdVVQGhNxXgLK-nnFjWF6eyyuchnQ7OGdphNEwEDSk8QChB6GDhW6q_Sj64wfqpufB8NeiuMZhzRAyliBrU-r_KVw6LoPlX31jm-zJgfxdPSw3Ylj7In6izd9pGZezYp7JblQ9_Z9qr7QvEYHhS8HT_ckL88kvQuqFKzlJF3ot04oKKGTUPW7HOywju8v1US_u1cJjzrGbfJ4jGZyL3IRhIVbPFNzim8e-3ivvmkWOXhAopH-e8CzzHO54d7nrplGubJLvYQBf0HlF7NcOXVdNT8ScBiXHQiV4Rb6Y88D0CXI=w1559-h974-no)
 
 You can select one of recipe and check ingredients and steps.<br />
